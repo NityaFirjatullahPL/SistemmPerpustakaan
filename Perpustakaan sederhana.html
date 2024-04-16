@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perpustakaan Sederhana</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('https://cdn.pixabay.com/photo/2016/09/08/22/43/books-1655783_1280.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  h1 {
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  #book-list {
+    margin: 20px auto;
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  #book-list table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  #book-list table th, #book-list table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  #book-list table th {
+    background-color: #ffcc00;
+    color: #333;
+  }
+  #book-form {
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  #book-form input[type="text"] {
+    padding: 8px;
+    width: 60%;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  #book-form input[type="submit"] {
+    padding: 8px 20px;
+    cursor: pointer;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+  }
+  #search {
+    padding: 8px;
+    width: 60%;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  #book-list table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  #book-list table tr:hover {
+    background-color: #ddd;
+  }
+  button {
+    padding: 6px 10px;
+    cursor: pointer;
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+  }
+  button:hover {
+    background-color: #cc0000;
+  }
+</style>
+</head>
+<body>
+<h1>Perpustakaan Sederhana</h1>
+
+<div id="book-form">
+  <h2>Tambah Buku</h2>
+  <form id="add-book-form">
+    <input type="text" id="title" placeholder="Judul Buku">
+    <input type="text" id="author" placeholder="Penulis">
+    <input type="submit" value="Tambah Buku">
+  </form>
+</div>
+
+<div id="book-list">
+  <h2>Daftar Buku</h2>
+  <input type="text" id="search" placeholder="Cari Buku">
+  <table id="books">
+    <thead>
+      <tr>
+        <th>Judul</th>
+        <th>Penulis</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="book-list-body">
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const form = document.getElementById('add-book-form');
+  const bookList = document.getElementById('book-list-body');
+  const searchInput = document.getElementById('search');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const title = document.getElementById('title').value;
+    const author = document.getElementById('author').value;
+    addBook(title, author);
+    form.reset();
+  });
+
+  searchInput.addEventListener('input', function() {
+    const searchValue = searchInput.value.toLowerCase();
+    const books = document.querySelectorAll('#book-list-body tr');
+    books.forEach(function(book) {
+      const title = book.querySelector('td:first-child').textContent.toLowerCase();
+      const author = book.querySelector('td:nth-child(2)').textContent.toLowerCase();
+      if (title.includes(searchValue) || author.includes(searchValue)) {
+        book.style.display = 'table-row';
+      } else {
+        book.style.display = 'none';
+      }
+    });
+  });
+
+  function addBook(title, author) {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${title}</td>
+      <td>${author}</td>
+      <td><button onclick="deleteBook(this)">Hapus</button></td>
+    `;
+    bookList.appendChild(row);
+  }
+
+  function deleteBook(row) {
+    row.parentNode.parentNode.remove();
+  }
+</script>
+
+</body>
+</html>
